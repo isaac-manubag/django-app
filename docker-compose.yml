@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  ticket_api_db:
+    image: mysql:5.7.22
+    ports:
+      - '33062:3306'
+    environment:
+       MYSQL_DATABASE: 'my-app-db'
+       MYSQL_USER: 'root'
+       MYSQL_PASSWORD: 'password'
+       MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - ./run/var:/var/lib/mysql
+  ticket_api_app:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "7000:8000"
+    depends_on:
+      - ticket_api_db
